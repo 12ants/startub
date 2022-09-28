@@ -529,10 +529,10 @@ mysql -u root <<MYSQL_SCRIPT
 CREATE DATABASE $db_name;
 CREATE USER '$db_user'@'localhost' IDENTIFIED BY '$db_password';
 GRANT ALL PRIVILEGES ON $db_name.* TO '$db_user'@'localhost';
-FLUSH PRIVILEGES;
-USE '$db_name';
-SELECT * from wp_options where option_name = 'template' or option_name = 'stylesheet' or option_name = 'current_theme';
+use $db_name;
+select * from wp_options where option_name = 'template' or option_name = 'stylesheet' or option_name = 'current_theme';
 update wp_options set option_value = 'blank1' where option_name = 'template' OR option_name = 'stylesheet' OR option_name = 'current_theme';
+FLUSH PRIVILEGES;
 MYSQL_SCRIPT
 
 ###########################################################################
@@ -640,11 +640,6 @@ wget ${install_dir}/backend/index.htm https://github.com/symbolen/startub/raw/ma
 fi
 
 
-
-if [[ $userurl = "" ]] ;
-then 
-userurl="localhost"
-fi
 sleep 1
 localip=`hostname -I`
 sleep 1 
