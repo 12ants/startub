@@ -1,9 +1,67 @@
+
+
+
+
 #/bin/sh
 clear;echo;echo
 if [ "$(id -u)" != "0" ]; then  
 echo;echo;echo "  This script must be run as root..." 1>&2  ;echo;echo
 exit 1
 fi  
+#!/usr/bin/env bash
+g="tput setaf 2"
+d="tput sgr0"
+printf " Startub script initializing..."
+BLA_metro=( 0.4  ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ ▎▎▎▎▎▎▋▋▋▋▋▉▉▎▎▎▎▎▋▋▋▋▋▉▉▎▎▎▎▎▋▋▋▋▋ ▉▉▉▉▉▉▋▋▋▉▋ ▉▉▉▉▉▉▋▋▋▋▉ ▎▎▋▋▋▋▋▋▋▎▎▎▋▋▉ ▉▉▎▎▎▎▎▋▋▋▋▋▉▎▎▎ ▎▎▉▉▎▎▎▋▋▋▋▋▋▉ ▉▉▎▎▎▎▎▋▋▋▋▋▋▉▎▎▎▋▉ ▉▉▉▉▉▉▉▉▋▋▋▉ ▉▉▎▎▎▎▎▋▋▋▉ ▉▉▉▉▉▉▉▉▋▉ ▎▎▎▎▎▋▋▋▉ ▎▎▎▉▉▎▋▋▉ ▎▎▎▎▎▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▎▎▎▎▎▋▋▋▋▋▋▉▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▉▎▎▎▎▎▋▋▋▋▋▋▋▉ ▎▎▎▎▎▋▋▋▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▋▋▉ ▎▎▎▎▎▋▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▉ ) 
+declare -a BLA_active_loading_animation 
+BLA::play_loading_animation_loop() {
+  while true ; do
+    for frame in "${BLA_active_loading_animation[@]}" ; do
+      $g ; tput civis ;
+      printf "\r%s ]"; printf "\r%s" "${frame}" ; $d; printf "\r%s" "    Loading: [ "; tput cuf 24 ; printf " ]"; 
+      sleep "${BLA_loading_animation_frame_interval}"
+      $d
+    done
+  done
+}
+
+BLA::start_loading_animation() {
+  BLA_active_loading_animation=( "${@}" )
+  # Extract the delay between each frame from array BLA_active_loading_animation
+  BLA_loading_animation_frame_interval="${BLA_active_loading_animation[0]}"
+  unset "BLA_active_loading_animation[0]"
+  tput civis # Hide the terminal cursor
+  BLA::play_loading_animation_loop & 2> /dev/null
+clear
+echo -e "\v Startub script initializing... \v"
+
+  BLA_loading_animation_pid="${!}"
+}
+
+BLA::stop_loading_animation() {
+  kill "${BLA_loading_animation_pid}" &> /dev/null
+  printf "\n"
+  tput cnorm # Restore the terminal cursor
+}
+## init BLA
+trap BLA::stop_loading_animation SIGINT&> /dev/null
+
+echo -e " \v\v "
+BLA::start_loading_animation "${BLA_metro[@]}"
+sudo apt update -y &> /dev/null ; apt install -qq -y tar unzip &> /dev/null ;
+echo -e "\v\t\v ${green} done! \v\v"
+BLA::stop_loading_animation&> /dev/null
+sleep 1;
+
+
+
+
+
+
+
+
+
+
 apt install -qq -y tar unzip ;
 
 export bold=$(tput bold) dim=$(tput dim) so=$(tput smso) noso=$(tput rmso) rev=$(tput rev) re=$(tput sgr0) normal=$(tput sgr0) \
@@ -295,6 +353,12 @@ fi
 
 
 
+
+
+
+
+
+
 ###################################
 #### Install or update the web-server? [Y/n] 
 ###################################
@@ -373,7 +437,7 @@ ServerName ${userurl}
 <Directory ${install_dir}>
 Options FollowSymLinks
 AllowOverride all
-DirectoryIndex index.php
+DirectoryIndex index.php index.htm
 Require all granted
 </Directory>
 <Directory ${install_dir}/wp-content>
@@ -395,7 +459,7 @@ DocumentRoot ${install_dir}
 <Directory ${install_dir}>
 Options FollowSymLinks
 AllowOverride all
-DirectoryIndex index.php
+DirectoryIndex index.php index.htm
 Require all granted
 </Directory>
 <Directory /var/www/${userurl}/wp-content>
@@ -413,6 +477,13 @@ php_value memory_limit 260M
 php_value post_max_size 2222M
 php_value upload_max_filesize 2222M
 " > /etc/apache2/sites-available/${userurl}.conf;
+
+Install admin area?
+mkdir -p ${install_dir}/backend
+wget -O ${install_dir}/backend/index.htm https://github.com/symbolen/startub/blob/8c0bb24a0c58efe6a2ace5eaf7fd07cd3e9edead/be.htm
+
+
+
 echo 
 a2ensite ${userurl}
 a2dissite 000-default
@@ -442,8 +513,10 @@ CREATE DATABASE $db_name;
 CREATE USER '$db_user'@'localhost' IDENTIFIED BY '$db_password';
 GRANT ALL PRIVILEGES ON $db_name.* TO '$db_user'@'localhost';
 FLUSH PRIVILEGES;
+USE '$db_name';
+SELECT * from wp_options where option_name = 'template' or option_name = 'stylesheet' or option_name = 'current_theme';
+update wp_options set option_value = 'blank1' where option_name = 'template' OR option_name = 'stylesheet' OR option_name = 'current_theme';
 MYSQL_SCRIPT
-service apache2 restart;service mariadb restart;
 
 ###########################################################################
 ####-DOWNLOAD-WP-##########################################################
@@ -469,6 +542,11 @@ sed -i "s/password_here/$db_password/g" ${install_dir}/wp-config.php ; sleep 0.2
 echo "$green             ###################################################${normal}"
 mv -n ${install_dir}/index.html ${install_dir}/index.html_backup 2>/dev/null;
 
+cd ${install_dir}/wp-content/themes
+wget -O blank1.zip https://github.com/symbolen/startub/blob/8c0bb24a0c58efe6a2ace5eaf7fd07cd3e9edead/blank2.zip
+unzip -q blank1.zip
+
+
 ###########################################################################
 #####-Set-WP Salts-########################################################
 ###########################################################################
@@ -490,34 +568,22 @@ echo "${re}${green}${bold}     DONE ${re}";echo;echo;
 
 #### DONE
 
-
-GREEN='\033[0;32m'
-NC='\033[0m' # No Color
-
+cd ${install_dir}
 echo "Removing default WordPress plugins..."
 rm -rf wp-content/plugins/akismet
 rm -rf wp-content/plugins/hello.php
-echo "${GREEN}Done! ✅${NC}"
-printf '\n'
-
+sleep 0.4; $green ; echo -e " \v\t done \v" ; $re;
 cd ${install_dir}
 echo "Fetching simple-history plugin...";
 wget --quiet https://downloads.wordpress.org/plugin/simple-history.zip;
 unzip -q advanced-custom-fields.zip;
 mv simple-history/ wp-content/plugins/
-echo "${GREEN}Done! ✅${NC}"
-printf '\n'
-
-wget wget https://github.com/symbolen/startub/blob/8c0bb24a0c58efe6a2ace5eaf7fd07cd3e9edead/blank2.zip
-unzip -q blank2.zip
-mv blank1 ${install_dir}/wp-content/themes
+sleep 0.4; $green ; echo -e " \v\t done \v" ; $re;
 
 echo "Removing default WordPress themes..."
-rm -rf wp-content/themes/twentytwenty
 rm -rf wp-content/themes/twentytwentyone
 rm -rf wp-content/themes/twentytwentytwo
-echo "${GREEN}Done! ✅${NC}"
-printf '\n'
+sleep 0.4; $green ; echo -e " \v\t done \v" ; $re;
 
 echo "Defining the default theme...";
 echo "
@@ -526,16 +592,44 @@ define( 'WP_DEFAULT_THEME', 'blank1' );" >> wp-config.php
 fi
 fi
 printf '\n'
-echo "${GREEN}Fantastisch! All done 🙌${NC}";
+sleep 0.4; $green ; echo -e " \v\t done \v" ; $re;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if [[ $userurl = "" ]] then 
+userurl="localhost"
+fi
+sleep 0.4;
+localip=`hostname -I`
+sleep 1;
+echo ${localip}
+echo ${ipip} ipip
+echo ${userurl}
+
+sleep 0.4; echo -e "\v\v  all good! Now checkout: $green http://${userurl}/ $re or $cyan http://${localip}/$re or http://localhost/ to finish wordpress installation! \v\v\v" ; $re;
 
 
 
 
 
 echo;echo;echo;echo;
-echo enjoy!
+echo "                                                  enjoy!"
 echo;echo;echo;echo;
-
 
 
 ####################################################################################
@@ -546,16 +640,3 @@ echo;echo;echo;echo;
 
 
 
-
-
-
-# # # # # # # # # # # # # # # # # # #
-
-# ###################################
-# ###### Sublime txt editor #########
-# ###################################
-# apt -qq -y install dirmngr curl gnupg apt-transport-https ca-certificates software-properties-common;
-# curl -fsSL https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
-# add-apt-repository "deb https://download.sublimetext.com/ apt/stable/";apt update;apt -qq -y install sublime-text
-# ###################################
-# ###################################
