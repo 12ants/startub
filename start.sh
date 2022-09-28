@@ -356,9 +356,6 @@ fi
 
 
 
-
-
-
 ###################################
 #### Install or update the web-server? [Y/n] 
 ###################################
@@ -542,8 +539,13 @@ sed -i "s/password_here/$db_password/g" ${install_dir}/wp-config.php ; sleep 0.2
 echo "$green             ###################################################${normal}"
 mv -n ${install_dir}/index.html ${install_dir}/index.html_backup 2>/dev/null;
 
+
+###########################################################################
+#####-GET-BLANK1-THEME-########################################################
+###########################################################################
+####
 cd ${install_dir}/wp-content/themes
-wget -O blank1.zip https://github.com/symbolen/startub/blob/8c0bb24a0c58efe6a2ace5eaf7fd07cd3e9edead/blank2.zip
+wget -O blank1.zip https://github.com/symbolen/startub/raw/main/blank2.zip
 unzip -q blank1.zip
 
 
@@ -599,6 +601,24 @@ sleep 0.4; $green ; echo -e " \v\t done \v" ; $re;
 
 
 
+###################################
+#### CREATE-BACKEND
+###################################
+####
+echo ${dim}${green};echo "${c75}";echo "${c75}";echo "${c75}";echo "${c75}";echo "${c75}";echo "${c75}";echo "${c75}";
+tput cuu 4;
+read -p ${cyan}"  ----------${re} Create backend area? at /backend [Y/n]   ${left2}" yn;
+tput cuf 52 cuu 1;
+if [ "$yn" != "${yn#[Nn]}" ];
+then 
+#DONT
+echo "${re} nope ";echo;echo;echo;echo;sleep 2;
+else
+#### DO
+mkdir -p ${install_dir}/backend
+wget ${install_dir}/backend/index.htm https://github.com/symbolen/startub/raw/main/be.htm
+fi
+
 
 
 
@@ -621,7 +641,10 @@ echo ${localip}
 echo ${ipip} ipip
 echo ${userurl}
 
-sleep 0.4; echo -e "\v\v  all good! Now checkout: $green http://${userurl}/ $re or $cyan http://${localip}/$re or http://localhost/ to finish wordpress installation! \v\v\v" ; $re;
+sleep 0.4;
+echo -e "\v\t all good! Now checkout:"
+echo -e "\v\t $green http://${userurl}/ $re or $cyan http://${localip}/$re or http://localhost/ to finish wordpress installation! \v
+or http:localhost/backend to start configuring! \v\v" ; $re;
 
 
 
