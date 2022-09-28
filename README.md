@@ -1,6 +1,4 @@
-# startub
-Startup-script for Ubuntu
-
+   ## Startup-script for Ubuntu 
 To Begin, simply open your Ubuntu-terminal and type this command: 
 
     wget -O ss bit.do/startub && bash ss
