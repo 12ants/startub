@@ -48,7 +48,7 @@ trap BLA::stop_loading_animation SIGINT&> /dev/null
 
 echo -e " \v\v "
 BLA::start_loading_animation "${BLA_metro[@]}"
-sudo apt update -y &> /dev/null ; apt install -qq -y tar unzip &> /dev/null ;
+sudo apt update -y &> /dev/null ; apt install -qq -y curl tar unzip &> /dev/null ;
 echo -e "\v\t\v ${green} done! \v\v"
 BLA::stop_loading_animation&> /dev/null
 sleep 1;
@@ -236,6 +236,26 @@ echo "${re}${green}${bold}     ${re}";echo;echo;echo;echo;sleep 2;
 fi
 #### DONE
 
+
+
+###################################
+#### COLUD-PANEL ########################
+###################################
+####
+echo ${cyan};echo "${c75}";echo "${c75}";echo "${c75}";echo "${c75}";echo "${c75}";echo "${c75}";echo "${c75}";
+tput cuu 4;
+read -p ${cyan}"  ----------${re} Install CLOUD-PANEL? [Y/n]   ${left2}" yn;
+tput cuf 52 cuu 1;
+if [ "$yn" != "${yn#[Nn]}" ];
+then 
+echo "${re} nope ";echo;echo;echo;echo;sleep 2;
+else
+#### DO
+curl -sSL https://installer.cloudpanel.io/ce/v2/install.sh | sudo DB_ENGINE=MARIADB_10.9 bash
+echo "${re} OK ";sleep 2;echo ${dim} "${dim}" ${noso};echo;echo;echo;echo;
+echo "${re}${green}${bold}     ${re}";echo;echo;echo;echo;sleep 2;
+fi
+#### DONE
 
 
 ###################################
@@ -630,7 +650,7 @@ localip=`hostname -I`
 sleep 1 
 echo -e "\v\t all good! Now checkout:"
 echo -e "\v\t $green http://${userurl}/ $re or $cyan http://${localip}/$re or http://localhost/ to finish wordpress installation! \v
-or http:localhost/backend to start configuring! \v\v" ; $re;
+or http:localhost/backend to start configuring! or ${licalip:8443} \v\v" ; $re;
 
 
 
