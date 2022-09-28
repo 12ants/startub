@@ -621,27 +621,13 @@ fi
 
 
 
-
-
-
-
-
-
-
-
-
-
-if [[ $userurl = "" ]] then 
+if [[ $userurl = "" ]] ;
+then 
 userurl="localhost"
 fi
-sleep 0.4;
+sleep 1
 localip=`hostname -I`
-sleep 1;
-echo ${localip}
-echo ${ipip} ipip
-echo ${userurl}
-
-sleep 0.4;
+sleep 1 
 echo -e "\v\t all good! Now checkout:"
 echo -e "\v\t $green http://${userurl}/ $re or $cyan http://${localip}/$re or http://localhost/ to finish wordpress installation! \v
 or http:localhost/backend to start configuring! \v\v" ; $re;
