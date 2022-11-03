@@ -2,20 +2,31 @@
 
 
 
-#/bin/sh
+#/bin/bash
 clear;echo;echo
 if [ "$(id -u)" != "0" ]; then  
 echo;echo;echo "  This script must be run as root..." 1>&2  ;echo;echo
 exit 1
 fi  
-#!/usr/bin/env bash
+mkdir -m 775 -p /home/tempstuff
+cd /home/tempstuff;
 g="tput setaf 2"
+red="tput setaf 1"
 d="tput sgr0"
-printf " Commencing self-destruct sequence... "
-sleep 1;
-printf " Self-destruct sequence failed... "
-sleep 1;
-printf " System strong "
+sleep 1; echo "      
+
+             -- Welcome to the shady installer!"; sleep 4;
+tput blink setaf 1 ; printf "
+
+       Commencing self-destruct sequence... " ; sleep 4; tput rev; printf " 
+                                                                
+             Self-destruct sequence failed...                   
+                                                                " ; echo ;
+sleep 2; echo ;
+${g} ; printf " System strong " ;
+sleep 4; echo ;
+${d}
+clear;
 BLA_metro=( 0.4  ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ ▎▎▎▎▎▎▋▋▋▋▋▉▉▎▎▎▎▎▋▋▋▋▋▉▉▎▎▎▎▎▋▋▋▋▋ ▉▉▉▉▉▉▋▋▋▉▋ ▉▉▉▉▉▉▋▋▋▋▉ ▎▎▋▋▋▋▋▋▋▎▎▎▋▋▉ ▉▉▎▎▎▎▎▋▋▋▋▋▉▎▎▎ ▎▎▉▉▎▎▎▋▋▋▋▋▋▉ ▉▉▎▎▎▎▎▋▋▋▋▋▋▉▎▎▎▋▉ ▉▉▉▉▉▉▉▉▋▋▋▉ ▉▉▎▎▎▎▎▋▋▋▉ ▉▉▉▉▉▉▉▉▋▉ ▎▎▎▎▎▋▋▋▉ ▎▎▎▉▉▎▋▋▉ ▎▎▎▎▎▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▎▎▎▎▎▋▋▋▋▋▋▉▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▉▎▎▎▎▎▋▋▋▋▋▋▋▉ ▎▎▎▎▎▋▋▋▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▋▋▉ ▎▎▎▎▎▋▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▉ ) 
 declare -a BLA_active_loading_animation 
 BLA::play_loading_animation_loop() {
