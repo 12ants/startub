@@ -11,7 +11,11 @@ fi
 #!/usr/bin/env bash
 g="tput setaf 2"
 d="tput sgr0"
-printf " Startub script initializing..."
+printf " Commencing self-destruct sequence... "
+sleep 1;
+printf " Self-destruct sequence failed... "
+sleep 1;
+printf " System strong "
 BLA_metro=( 0.4  ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ ▎▎▎▎▎▎▋▋▋▋▋▉▉▎▎▎▎▎▋▋▋▋▋▉▉▎▎▎▎▎▋▋▋▋▋ ▉▉▉▉▉▉▋▋▋▉▋ ▉▉▉▉▉▉▋▋▋▋▉ ▎▎▋▋▋▋▋▋▋▎▎▎▋▋▉ ▉▉▎▎▎▎▎▋▋▋▋▋▉▎▎▎ ▎▎▉▉▎▎▎▋▋▋▋▋▋▉ ▉▉▎▎▎▎▎▋▋▋▋▋▋▉▎▎▎▋▉ ▉▉▉▉▉▉▉▉▋▋▋▉ ▉▉▎▎▎▎▎▋▋▋▉ ▉▉▉▉▉▉▉▉▋▉ ▎▎▎▎▎▋▋▋▉ ▎▎▎▉▉▎▋▋▉ ▎▎▎▎▎▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▎▎▎▎▎▋▋▋▋▋▋▉▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▉▎▎▎▎▎▋▋▋▋▋▋▋▉ ▎▎▎▎▎▋▋▋▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▋▋▉ ▎▎▎▎▎▋▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▋▋▉ ▉▉▉▉▉▉▎▎▎▎▎▋▋▋▉ ) 
 declare -a BLA_active_loading_animation 
 BLA::play_loading_animation_loop() {
